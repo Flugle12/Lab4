@@ -1,19 +1,28 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Collections.Generic;
+using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics;
 
 
 public class Program
 {
     static void Main(string[] args)
     {
-        List<int> list = new List<int>(4) { 1,2,3,4 };
-        ReverseLists(ref list);
-        PrintList(list);
+        List<int> list = new List<int>(4) { 1,2,3,4 }; //list for first 
+        ReverseLists(ref list); // first task
+        PrintList(list); // print List
 
-        InsertAroundElements(ref list, 3);
-        PrintList(list);
+        LinkedList<int> list2 = new LinkedList<int>(); //create linkedList for second task
+        for(int i = 0; i < 4; i++)
+        {
+            list2.AddLast(i);
+        }
+
+
+        InsertAroundElements(ref list2, 3, 90); //second task
+        PrintList(list2); // print Linked List
     
-        HashSet<char> Clubs = new HashSet<char>() { 'a', 'b', 'c', 'f'};
+        HashSet<char> Clubs = new HashSet<char>() { 'a', 'b', 'c', 'f'}; // clubs for fird task
         Dictionary<string, HashSet<char>> studentsd = new Dictionary<string, HashSet<char>>()
         {
             { "student A", new HashSet<char> {'a', 'b', 'c'}},
@@ -22,9 +31,16 @@ public class Program
             { "student D", new HashSet<char> {'a', 'b'}},
             { "student E", new HashSet<char> {'a'}},
             { "student F", new HashSet<char> {'b', 'a'}}
-        };
+        }; //dictionary for 4 task have a student and visited clubs
 
-        Disco(Clubs, studentsd);
+        Disco(Clubs, studentsd); // 3 task
+
+
+        string FileName = "C:\\Users\\User\\source\\repos\\Lab4\\bin\\Debug\\Text.txt";
+        UniqueCharInText(FileName);
+
+        
+
     }
 
     //1
@@ -44,10 +60,14 @@ public class Program
     }
 
     //2
-    static void InsertAroundElements(ref List<int> L, int element, int ElementForInsert = 0)
+    static void InsertAroundElements(ref LinkedList<int> L, int element, int ElementForInsert = 0)
     {
-        L.Insert(L.Find(p => p == element)-1, ElementForInsert);
-        L.Insert(L.Find(p => p == element)-2, ElementForInsert);
+        var node = L.Find(element);
+        if(node != null)
+        {
+            L.AddBefore(node, ElementForInsert);
+            L.AddAfter(node, ElementForInsert);
+        }
     }
 
     //3
@@ -75,10 +95,63 @@ public class Program
         Console.WriteLine("Клубы, в которых не было ни одного студента: " + string.Join(", ", NoOneVisitedClubs));
     }
 
+    //4
 
-private static void PrintList(List<int> list)
+    static void UniqueCharInText(string fileName)
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = fileName,
+            UseShellExecute = true
+        });
+
+        HashSet<char> uniqueChar = new HashSet<char>();
+        string text;
+
+        if (!File.Exists(fileName))
+        {
+            throw new ArgumentException("File not founded");
+        }
+        else
+        {
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                text = reader.ReadToEnd();
+            }
+
+            string[] word = text.Split(new char[] { ' ', '\n', '\r', ',', '.', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+
+
+
+            for (int i = 1; i < word.Length; i += 2)
+            {
+                foreach (char ch in word[i])
+                {
+                    uniqueChar.Add(ch);
+                }
+            }
+        }
+
+        var sortedChar = uniqueChar.OrderBy(ch => ch);
+
+        Console.WriteLine("Уникальные символы: ");
+        foreach (char ch in sortedChar)
+        {
+            Console.Write(ch + " ");
+        }
+    }
+
+
+
+    private static void PrintList(List<int> list)
     {
         Console.WriteLine(string.Join(", ", list));
+    }
+
+    private static void PrintList(LinkedList<int> list)
+    {
+        foreach (var item in list) Console.Write(item.ToString() + ", ");
+        Console.WriteLine();
     }
 
 }
