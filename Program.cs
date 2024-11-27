@@ -4,10 +4,6 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Diagnostics;
 using System.Xml.Serialization;
 
-
-
-
-
 public class Program
 {
     static void Main(string[] args)
@@ -44,15 +40,8 @@ public class Program
         UniqueCharInText(FileName);
 
         StudentPassedExams();
-
-    }
-
+        }
     //1
-
-    /*
-     * Составить программу, которая переворачивает список L, т.е. изменяет ссылки в этом списке так, 
-     * чтобы его элементы оказались расположенными в обратном порядке.
-     */
     static void ReverseLists(ref List<int> L)
     {
         List<int> reverseLiset = new List<int>(L.Count);
@@ -147,14 +136,16 @@ public class Program
     //5
     static void StudentPassedExams()
     {
+        Console.WriteLine("\nВведите количетво судентов, а затем n записей о студентах:");
         Dictionary<string, List<int>> Students = new Dictionary<string, List<int>>();
         int n;
 
-        if(!int.TryParse(Console.ReadLine(), out n)){
+        if (!int.TryParse(Console.ReadLine(), out n))
+        {
             throw new ArgumentException("NaN");
         }
 
-        for(int i = 0; i <= n; i++)
+        for (int i = 0; i < n; i++)
         {
             string inputText = Console.ReadLine();
             string[] part = inputText.Split(' ');
@@ -181,9 +172,9 @@ public class Program
 
 
         admitedStudent.Sort();
-        foreach(var student in admitedStudent)
+        foreach (var student in admitedStudent)
         {
-            Console.WriteLine(student);
+            Console.WriteLine(student + " ");
         }
     }
 
