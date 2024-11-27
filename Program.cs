@@ -8,38 +8,83 @@ public class Program
 {
     static void Main(string[] args)
     {
-        List<int> list = new List<int>(4) { 1,2,3,4 }; //list for first 
+        try { 
+        Random intRand = new Random();
+
+        Console.WriteLine("Введите длинну массива: ");
+        int lenghL1;
+        if(!int.TryParse(Console.ReadLine(), out lenghL1) || lenghL1 <= 0)
+        {
+            throw new ArgumentException("NaN");
+        }
+
+        List<int> list = new List<int>(lenghL1); //list for first 
+        for(int i = 0; i < lenghL1; i ++)
+        {
+            list.Add(intRand.Next(1,101));
+        }
+
+        PrintList(list); // print List
         ReverseLists(ref list); // first task
         PrintList(list); // print List
 
+        Console.WriteLine();
+
         LinkedList<int> list2 = new LinkedList<int>(); //create linkedList for second task
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < 9; i++)
         {
             list2.AddLast(i);
         }
 
-
-        InsertAroundElements(ref list2, 3, 90); //second task
-        PrintList(list2); // print Linked List
-    
-        HashSet<char> Clubs = new HashSet<char>() { 'a', 'b', 'c', 'f'}; // clubs for fird task
-        Dictionary<string, HashSet<char>> studentsd = new Dictionary<string, HashSet<char>>()
+        Console.WriteLine("Введите число около которого вы хотите встаить элементы и число которое отите вставить");
+        int e, inserter;
+        if(!int.TryParse(Console.ReadLine(), out e) || !int.TryParse(Console.ReadLine(), out inserter) || e > list2.Count())
         {
-            { "student A", new HashSet<char> {'a', 'b', 'c'}},
-            { "student B", new HashSet<char> {'a', 'b',}},
-            { "student C", new HashSet<char> {'a', 'c'}},
-            { "student D", new HashSet<char> {'a', 'b'}},
-            { "student E", new HashSet<char> {'a'}},
-            { "student F", new HashSet<char> {'b', 'a'}}
-        }; //dictionary for 4 task have a student and visited clubs
+            throw new ArgumentException("NaN");
+        }
 
-        Disco(Clubs, studentsd); // 3 task
+        PrintList(list2); // print Linked List
+        InsertAroundElements(ref list2, e, inserter); //second task
+        PrintList(list2); // print Linked List
 
+        Console.WriteLine("Введите количество студентов:");
+        int numberOfStudents;
+        if (!int.TryParse(Console.ReadLine(), out numberOfStudents) || numberOfStudents <= 0)
+        {
+            throw new ArgumentException("Некорректное количество студентов.");
+        }
 
+        Dictionary<string, HashSet<char>> studentsd = new Dictionary<string, HashSet<char>>();
+
+        for (int i = 0; i < numberOfStudents; i++)
+        {
+            Console.WriteLine($"Введите имя студента {i + 1} и посещенные клубы (например: 'student A a b c') (названия клубов a b c f):");
+            string input = Console.ReadLine();
+            string[] parts = input.Split(' ');
+            string studentName = parts[0];
+            HashSet<char> clubsVisited = new HashSet<char>(parts.Skip(1).Select(c => c[0]));
+
+            if (studentsd.ContainsKey(studentName))
+            {
+                Console.WriteLine($"Студент {studentName} уже добавлен. Попробуйте снова.");
+                i--;
+                continue;
+            }
+
+            studentsd[studentName] = clubsVisited;
+        }
+
+        HashSet<char> Clubs = new HashSet<char>() { 'a', 'b', 'c', 'f' };
+        Disco(Clubs, studentsd);
         string FileName = "C:\\Users\\User\\source\\repos\\Lab4\\bin\\Debug\\Text.txt";
         UniqueCharInText(FileName);
 
         StudentPassedExams();
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
         }
     //1
     static void ReverseLists(ref List<int> L)
@@ -56,10 +101,15 @@ public class Program
     static void InsertAroundElements(ref LinkedList<int> L, int element, int ElementForInsert = 0)
     {
         var node = L.Find(element);
-        if(node != null)
+        if (node != null)
         {
             L.AddBefore(node, ElementForInsert);
             L.AddAfter(node, ElementForInsert);
+        }
+        else
+        {
+            Console.WriteLine("нет в массиве");
+            return;
         }
     }
 
