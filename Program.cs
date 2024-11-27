@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using static System.Net.Mime.MediaTypeNames;
 using System.Diagnostics;
+using System.Xml.Serialization;
+
+
+
 
 
 public class Program
@@ -39,7 +43,7 @@ public class Program
         string FileName = "C:\\Users\\User\\source\\repos\\Lab4\\bin\\Debug\\Text.txt";
         UniqueCharInText(FileName);
 
-        
+        StudentPassedExams();
 
     }
 
@@ -96,7 +100,6 @@ public class Program
     }
 
     //4
-
     static void UniqueCharInText(string fileName)
     {
         Process.Start(new ProcessStartInfo
@@ -141,6 +144,48 @@ public class Program
         }
     }
 
+    //5
+    static void StudentPassedExams()
+    {
+        Dictionary<string, List<int>> Students = new Dictionary<string, List<int>>();
+        int n;
+
+        if(!int.TryParse(Console.ReadLine(), out n)){
+            throw new ArgumentException("NaN");
+        }
+
+        for(int i = 0; i <= n; i++)
+        {
+            string inputText = Console.ReadLine();
+            string[] part = inputText.Split(' ');
+
+            string fullName = part[0] + part[1];
+
+            List<int> studentScore = part.Skip(2).Select(int.Parse).ToList();
+
+            Students[fullName] = studentScore;
+        }
+
+        List<string> admitedStudent = new List<string>();
+
+        foreach (var student in Students)
+        {
+            string name = student.Key;
+            List<int> score = student.Value;
+
+            if (score[0] >= 30 && score[1] >= 30 && score[2] >= 30 && score.Sum() >= 140)
+            {
+                admitedStudent.Add(name);
+            }
+        }
+
+
+        admitedStudent.Sort();
+        foreach(var student in admitedStudent)
+        {
+            Console.WriteLine(student);
+        }
+    }
 
 
     private static void PrintList(List<int> list)
