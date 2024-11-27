@@ -87,29 +87,29 @@ public class Program
         }
         }
     //1
-    static void ReverseLists(ref List<int> L)
+    static void ReverseLists<T>(ref List<T> L)
     {
-        List<int> reverseLiset = new List<int>(L.Count);
+        List<T> reverseList = new List<T>(L.Count);
         for (int i = L.Count - 1; i >= 0; i--)
         {
-            reverseLiset.Add(L[i]);
+            reverseList.Add(L[i]);
         }
-        L = reverseLiset;
+        L.Clear();
+        L.AddRange(reverseList);
     }
 
     //2
-    static void InsertAroundElements(ref LinkedList<int> L, int element, int ElementForInsert = 0)
+    static void InsertAroundElements<T>(ref LinkedList<T> L, T element, T elementForInsert = default(T))
     {
         var node = L.Find(element);
         if (node != null)
         {
-            L.AddBefore(node, ElementForInsert);
-            L.AddAfter(node, ElementForInsert);
+            L.AddBefore(node, elementForInsert);
+            L.AddAfter(node, elementForInsert);
         }
         else
         {
-            Console.WriteLine("нет в массиве");
-            return;
+            Console.WriteLine("Элемент не найден в списке.");
         }
     }
 
@@ -229,16 +229,20 @@ public class Program
     }
 
 
-    private static void PrintList(List<int> list)
+    private static void PrintList<T>(List<T> list)
     {
         Console.WriteLine(string.Join(", ", list));
     }
 
-    private static void PrintList(LinkedList<int> list)
+    private static void PrintList<T>(LinkedList<T> list)
     {
-        foreach (var item in list) Console.Write(item.ToString() + ", ");
+        foreach (var item in list)
+        {
+            Console.Write(item.ToString() + ", ");
+        }
         Console.WriteLine();
     }
-
 }
+
+
 
